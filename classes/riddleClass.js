@@ -22,7 +22,7 @@ export class Riddle{
         }
         console.log("Correct!");
         const endTime = Date.now();
-        const duration = endTime - startTime;
+        const duration = (endTime - startTime) / 1000;
         return duration;
     }
     

@@ -43,6 +43,6 @@ for(let riddle of chosenLevel){
 
     
 
-console.log(`Your total time is: ${totalTime}\nYour average time pe riddle is: ${totalTime/3} `)
+console.log(`Your total time is: ${totalTime} seconds.\nYour average time per riddle is: ${totalTime/chosenLevel.length} seconds. `)
 
 
