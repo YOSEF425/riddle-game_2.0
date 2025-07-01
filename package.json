@@ -1,0 +1,23 @@
+{
+  "name": "java-script",
+  "version": "1.0.0",
+  "main": "06.js",
+  "type":"module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOSEF425/JavaScript-22-06.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YOSEF425/JavaScript-22-06/issues"
+  },
+  "homepage": "https://github.com/YOSEF425/JavaScript-22-06#readme",
+  "description": "",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
