@@ -1,0 +1,44 @@
+[
+  {
+    "difficulty": "easy",
+    "id": "1",
+    "name": "easy math",
+    "taskDescription": "what is 9 - 3?",
+    "correctAnswer": "6"
+  },
+  {
+    "difficulty": "medium",
+    "id": "2",
+    "name": "geography",
+    "taskDescription": "what's the capital of New Zeland?",
+    "correctAnswer": "Wellington"
+  },
+  {
+    "difficulty": "easy",
+    "id": "3",
+    "name": "math",
+    "taskDescription": "what is 6 * 8?",
+    "correctAnswer": "48"
+  },
+  {
+    "difficulty": "hard",
+    "id": "4",
+    "name": "math",
+    "taskDescription": "what is 56 * 234?",
+    "correctAnswer": "13104"
+  },
+  {
+    "difficulty": "easy",
+    "id": "5",
+    "name": "math",
+    "taskDescription": "what is 8 / 4?",
+    "correctAnswer": "2"
+  },
+  {
+    "difficulty": "easy",
+    "id": 1,
+    "name": "subtract",
+    "taskDescription": "what is 938-112?",
+    "correctAnswer": "826"
+  }
+]
