@@ -40,4 +40,5 @@ for (let riddle of chosenLevel) {
 
 console.log(`Your total time is: ${totalTime} seconds.\nYour average time per riddle is: ${totalTime / chosenLevel.length} seconds. `)
 
+console.log("hello");
 
