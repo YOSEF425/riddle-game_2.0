@@ -12,7 +12,9 @@ function changeRiddle(riddleId){
             console.log("error reading file");
             return
         }
+        console.log(data)
         const riddleArray = JSON.parse(data)
+        console.log(riddleArray)
 
         for(const riddle of riddleArray){
             if(riddle.id === riddleId){
