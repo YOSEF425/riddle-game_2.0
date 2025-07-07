@@ -1,12 +1,5 @@
-import readline from 'readline-sync';
-import fs, { read } from 'node:fs';
-
-
-
 function changeRiddle(riddleId){
-    const choice = readline.question(`Which part of the riddle do you want to change?(name,difficulty,question,answer)`)
-    const newVersion = readline.question("What is the version after the change?")
-
+  
     fs.readFile("../riddlesDB/riddleList.txt","utf8",(err,data) => {
         if(err){
             console.log("error reading file");
@@ -18,7 +11,7 @@ function changeRiddle(riddleId){
 
         for(const riddle of riddleArray){
             if(riddle.id === riddleId){
-                riddle[choice] = newVersion
+                riddleArray.remove(riddle)
                 break
             }
         }
