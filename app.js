@@ -11,7 +11,7 @@ console.log(`Hello ${name}!\n\n\n`);
 
 // let chosenLevel = [];
 
-const choice = readline.question(`What do you want to do?\n1. Play hte game\n2. Create a new riddle\n3.
+const choice = readline.question(`What do you want to do?\n1. Play the game\n2. Create a new riddle\n3.
      Read all riddles\n 4. Update an existing riddle\n5. Delete a riddle\n6. View leaderboard`); 
 
 
