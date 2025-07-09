@@ -9,8 +9,6 @@ function createRiddle(){
     const describe = readline.question("Describe the riddle.");
     const answer = readline.question("What is the answer to the riddle?")
 
-
-    let yourRiddle = new Riddle(difficulty,1,riddleName,describe,answer)
 }
 
 function sendRiddleToDB(riddle){
