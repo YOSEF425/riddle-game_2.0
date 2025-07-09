@@ -40,5 +40,12 @@
     "name": "subtract",
     "taskDescription": "what is 938-112?",
     "correctAnswer": "826"
+  },
+  {
+    "difficulty": "easy",
+    "id": 4,
+    "name": "math",
+    "taskDescription": "what is 7 * 3",
+    "correctAnswer": 21
   }
 ]
