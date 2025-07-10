@@ -21,7 +21,6 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
 
         
         case("2"):
-          
 
          case("3"):
 
