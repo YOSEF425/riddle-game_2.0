@@ -1,5 +1,6 @@
-const express = require('express')
-const fs = require('fs');
+import express from "express"
+import fs from 'fs'
+
 
 const app = express();
 
@@ -18,10 +19,25 @@ app.get('/api/riddles',(req,res) => {
 })
 
 
-// app.post('/api/riddles',(req,res) => {
-//     const riddle = req.body
+app.post('/api/riddles',(req,res) => {
+    const riddle = req.body;
+    fs.readFile('../riddlesDB/riddleList.txt','utf-8',(error,data) => {
+        if(error){
+            res.send("error reading from database")
+        }
+        const riddleArray = JSON.parse(data)
+        riddleArray.push(riddle)
+    })
+    fs.writeFile('../riddlesDB/riddleList.txt',riddleArray,(error) => {
+        if(error){
+            res.send("error sending riddle to database.")
+        }
+        res.send("added riddle to database!")
 
-// })
+    })
+})
+
+
 
 
 
