@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { response } from 'express';
 
 
-function createRiddle(){     // create riddle "object" , get all properties from user
+export function createRiddle(){     // create riddle "object" , get all properties from user
     const riddleName = readline.question("What is the name of the riddle you want to add?")
     const difficulty = readline.question("What is the difficuly level?(easy, medium , hard)")
     const describe = readline.question("Describe the riddle.");
