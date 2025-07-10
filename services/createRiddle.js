@@ -55,9 +55,6 @@ function createRiddle(){     // create riddle "object" , get all properties from
 //     })
 // }
 
-=======
-}
-
 function sendRiddleToDB(riddle){     // function to send given riddle to db
     fs.readFile("../riddlesDB/riddleList.txt","utf8",(error,data) => {
         if(error){
