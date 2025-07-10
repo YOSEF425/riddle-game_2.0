@@ -37,7 +37,11 @@ app.post('/api/riddles',(req,res) => {
     })
 })
 
+app.put('/api/riddles/:id',(req,res) => {
+     const id = req.body.id;
+     
 
+})
 
 
 
