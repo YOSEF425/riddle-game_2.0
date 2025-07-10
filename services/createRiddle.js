@@ -1,6 +1,7 @@
 import readline from 'readline-sync';
 import {Riddle} from '../classes/Riddle.js'
 import fs from 'node:fs';
+import { response } from 'express';
 
 
 function createRiddle(){     // create riddle "object" , get all properties from user
@@ -11,6 +12,8 @@ function createRiddle(){     // create riddle "object" , get all properties from
 
 
     let myRiddle = new Riddle(difficulty,5,riddleName,describe,answer);
+
+  
     fetch('http://loclahost:5000/api/riddles',{
         method: 'POST',
         headers: {
@@ -18,7 +21,12 @@ function createRiddle(){     // create riddle "object" , get all properties from
         },
         body: JSON.stringify(myRiddle)
     })
+    .then(response => {
+        console.log(response.text())
+    })
 }
+
+
 
 
 
