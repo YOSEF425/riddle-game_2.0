@@ -7,7 +7,7 @@ import { error } from 'node:console';
 function changeRiddle(riddleId){
     const choice = readline.question(`Which part of the riddle do you want to change?(name,difficulty,question,answer)`)
     const newVersion = readline.question("What is the version after the change?")
-
+    const updatedVersion = 
      
    
 }
@@ -18,9 +18,9 @@ function changeRiddle(riddleId){
 
 
 
- for(const riddle of riddleArray){             
-            if(riddle.id === riddleId){
-                riddle[choice] = newVersion
-                break
-            }
-        }
+//  for(const riddle of riddleArray){             
+//             if(riddle.id === riddleId){
+//                 riddle[choice] = newVersion
+//                 break
+//             }
+//         }
