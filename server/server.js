@@ -39,16 +39,36 @@ app.post('/api/riddles',(req,res) => {
     }))
 })
 
-// app.put('/api/riddles/:id',(req,res) => {
-//      const id = req.body.id;
+app.put('/api/riddles/:id',(req,res) => {
+     const id = req.body.id;
+     const propertie = req.body;
+     const newVersion = req.body.propertieToChange;
+
      
+    fs.readFile('./DATA/riddlesList.txt','utf-8',(error,data) => {
+        if(error){
+            res.status(500). res.send("error reading from database")
+        }
+        const riddleArray = JSON.parse(data)
 
-// })
+        for(const riddle of riddleArray){
+            if(riddle.id === id){
+                riddle[propertie] = newVersion;
+                break;
+            }
+        }
+    
+        fs.writeFile('./DATA/riddlesList.txt',JSON.stringify(riddleArray,null,2),(error) => {
+          if(error){
+              res.status(500). res.send("error sending riddle to database.")
+          }
+          res.send("added update riddle to database!")
+        })
 
 
+    })
 
-
-
+})
 
 
 
