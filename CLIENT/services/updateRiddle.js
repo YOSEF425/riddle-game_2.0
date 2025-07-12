@@ -4,9 +4,14 @@ import { error } from 'node:console';
 
 
 
-function changeRiddle(riddleId){
-    const choice = readline.question(`Which part of the riddle do you want to change?(name,difficulty,question,answer)`)
+async function changeRiddle(riddleId){
+    const propertirToUpdate = readline.question(`Which part of the riddle do you want to change?(name,difficulty,question,answer)`)
     const newVersion = readline.question("What is the version after the change?")
+
+    const response = await fetch('')
+
+
+
 
      
    
