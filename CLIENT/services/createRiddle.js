@@ -1,7 +1,6 @@
 import readline from 'readline-sync';
 import {Riddle} from '../classes/Riddle.js'
 import fs from 'node:fs';
-import { response } from 'express';
 
 
 export async function createRiddle(){     // create riddle "object" , get all properties from user
@@ -24,10 +23,10 @@ export async function createRiddle(){     // create riddle "object" , get all pr
         const result = await response.text()
         console.log(result)
         
-
+    }
 
      
-}
+
 
 
 

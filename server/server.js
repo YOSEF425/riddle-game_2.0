@@ -25,18 +25,24 @@ app.post('/api/riddles',(req,res) => {
 
     fs.readFile('./DATA/riddlesList.txt','utf-8',(error,data) => {
         if(error){
-            res.status(500). res.send("error reading from database")
+            return res.status(500).send("error reading from database")
         }
-        const riddleArray = JSON.parse(data)
+        let riddleArray = []
+        try{
+            riddleArray = JSON.parse(data);
+        }catch(err){
+            return res.status(500).send("couldnt parse data")
+        }
         riddleArray.push(riddle)
-        },
+        
         fs.writeFile('./DATA/riddlesList.txt',JSON.stringify(riddleArray,null,2),(error) => {
           if(error){
-              res.status(500). res.send("error sending riddle to database.")
+              return res.status(500).send("error sending riddle to database.")
           }
           res.send("added riddle to database!")
 
-    }))
+        })
+    })
 })
 
 app.put('/api/riddles/:id',(req,res) => {

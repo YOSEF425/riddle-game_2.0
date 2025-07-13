@@ -21,20 +21,20 @@ async function changeRiddle(riddleId){
     console.log('Server responded:', result);
 
 
-
+}
 
 
     
 
 
-
+changeRiddle();
 
 
     
 
      
    
-}
+
 
 
 
