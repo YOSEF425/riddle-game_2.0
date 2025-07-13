@@ -47,5 +47,12 @@
     "name": "math",
     "taskDescription": "what is 7 * 3",
     "correctAnswer": 21
+  },
+  {
+    "difficulty": "medium",
+    "id": 5,
+    "name": "geography",
+    "taskDescription": "what is the capital of Canada?",
+    "correctAnswer": "Ottawa"
   }
 ]
