@@ -1,5 +1,6 @@
 import express from "express"
-import fs from 'fs'
+import { connectToMongo } from "./MongoDB/db.js";
+import client from "./MongoDB/db.js";
 
 
 const app = express();
@@ -77,7 +78,9 @@ app.put('/api/riddles/:id',(req,res) => {
 })
 
 
-
+await connectToMongo();
+const db = client.db("myDatabase")
+await db.createCollection("riddleCollection")
 
 
 app.listen(PORT,() => {
