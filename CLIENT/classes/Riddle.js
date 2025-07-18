@@ -2,9 +2,8 @@ import readline from 'readline-sync';
 
 export class Riddle {
 
-    constructor(difficulty, id, name, taskDescription, correctAnswer) {
+    constructor(difficulty, name, taskDescription, correctAnswer) {
         this.difficulty = difficulty;
-        this.id = id;
         this.name = name;
         this.taskDescription = taskDescription;
         this.correctAnswer = correctAnswer;

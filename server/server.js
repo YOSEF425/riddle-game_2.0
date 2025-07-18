@@ -1,5 +1,6 @@
 import express from "express"
-import fs from 'fs'
+import { connectToMongo } from "./MongoDB/db.js";
+import client from "./MongoDB/db.js";
 
 
 const app = express();
@@ -9,40 +10,28 @@ const PORT = 5000;
 app.use(express.json());
 
 
-app.get('/api/riddles',(req,res) => {
-    fs.readFile('../riddlesDB/riddleList.txt','utf-8',(error,data) => {
-        if(error){
-            console.error(`error reading data: ${error}`)
-        }
-        res.send(data)
-    })
+app.get('/api/riddles',async(req,res) => {
+    try{
+         const allDocs = await riddleCollection.find({}).toArray();
+        res.send(allDocs)
+    }catch(error){
+        res.send(`Error reading for database: ${error}`)
+    }
+
 })
 
 
-app.post('/api/riddles',(req,res) => {
-    const riddle = req.body;
+app.post('/api/riddles',async(req,res) => {
+    const newDoc = req.body;
     console.log(`Recieved riddle: ${riddle}`)
+    try{
+       const result = await riddleCollection.insertOne(newDoc)
+       res.send("added riddle to database!")
 
-    fs.readFile('./DATA/riddlesList.txt','utf-8',(error,data) => {
-        if(error){
-            return res.status(500).send("error reading from database")
-        }
-        let riddleArray = []
-        try{
-            riddleArray = JSON.parse(data);
-        }catch(err){
-            return res.status(500).send("couldnt parse data")
-        }
-        riddleArray.push(riddle)
-        
-        fs.writeFile('./DATA/riddlesList.txt',JSON.stringify(riddleArray,null,2),(error) => {
-          if(error){
-              return res.status(500).send("error sending riddle to database.")
-          }
-          res.send("added riddle to database!")
+    }catch(error){
+        res.send(`error uploading riddle to db ${error}`)
+    }
 
-        })
-    })
 })
 
 app.put('/api/riddles/:id',(req,res) => {
@@ -77,7 +66,9 @@ app.put('/api/riddles/:id',(req,res) => {
 })
 
 
-
+await connectToMongo();
+const db = client.db("myDatabase")
+await db.createCollection("riddleCollection")
 
 
 app.listen(PORT,() => {
