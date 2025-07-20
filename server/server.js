@@ -34,34 +34,31 @@ app.post('/api/riddles',async(req,res) => {
 
 })
 
-app.put('/api/riddles/:id',(req,res) => {
-     const id = req.body.id;
-     const propertie = req.body;
-     const newVersion = req.body.propertieToChange;
+app.put('/api/riddles/:id',async(req,res) => {
+
+    try{
+     const id = req.params.id;
+     const propertieToChange = req.body;
+     const newVersion = req.body.propertieToUpdate;
+
+     const foundRiddle = { _id: new ObjectId(id) };
+
+     const update = {
+     $set: {
+       propertieToChange: newVersion,
+       },
+    };
+    const updatedRiddle = await collection.updateOne(foundRiddle, update);
+    res.send('updated riddle!')
+    }catch(error){
+        res.send(`error updating riddle: ${error}`)
+    }
 
      
-    fs.readFile('./DATA/riddlesList.txt','utf-8',(error,data) => {
-        if(error){
-            res.status(500). res.send("error reading from database")
-        }
-        const riddleArray = JSON.parse(data)
-
-        for(const riddle of riddleArray){
-            if(riddle.id === id){
-                riddle[propertie] = newVersion;
-                break;
-            }
-        }
+     
     
-        fs.writeFile('./DATA/riddlesList.txt',JSON.stringify(riddleArray,null,2),(error) => {
-          if(error){
-              res.status(500). res.send("error sending riddle to database.")
-          }
-          res.send("added update riddle to database!")
-        })
 
-
-    })
+    
 
 })
 

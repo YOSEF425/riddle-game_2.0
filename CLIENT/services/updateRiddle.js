@@ -1,5 +1,4 @@
 import readline from 'readline-sync';
-import fs, { read } from 'node:fs';
 import { error } from 'node:console';
 
 
