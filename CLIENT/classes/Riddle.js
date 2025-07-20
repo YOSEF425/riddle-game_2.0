@@ -2,7 +2,7 @@ import readline from 'readline-sync';
 
 export class Riddle {
 
-    constructor(difficulty, name, taskDescription, correctAnswer) {
+    constructor({difficulty, name, taskDescription, correctAnswer}) {
         this.difficulty = difficulty;
         this.name = name;
         this.taskDescription = taskDescription;
@@ -11,7 +11,6 @@ export class Riddle {
 
     ask() {
         const startTime = Date.now();
-        console.log(this.name)
         let answer = "";
         while (answer !== this.correctAnswer) {
             answer = readline.question(`${this.taskDescription}`);

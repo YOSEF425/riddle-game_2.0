@@ -15,11 +15,11 @@ export async function readRiddlesToPlay() {
   const result = await fetch('http://localhost:5000/api/riddles/play');
   const riddleArray = await result.json();
 
+  console.log('======HERE ARE THE RIDDLES:========')
   riddleArray.forEach(riddle => {
-    const newRiddle = new Riddle(riddle);
-    console.log(newRiddle)
+    const newRiddle = new Riddle(riddle)
+
     newRiddle.ask();
   });
 }
   
-
