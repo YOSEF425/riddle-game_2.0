@@ -4,6 +4,7 @@ import { Riddle } from './classes/Riddle.js';
 import {createRiddle} from './services/createRiddle.js'
 import {readRiddles,readRiddlesToPlay} from './services/readRiddles.js'
 import {updateRiddle} from './services/updateRiddle.js'
+import { deleteRiddle } from './services/deleteRiddle.js';
 
 
 console.log("Welcome to the quiz!")
@@ -34,7 +35,7 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
            break; 
            
          case("5"):
-
+          deleteRiddle();
 
          case("6"):
 
