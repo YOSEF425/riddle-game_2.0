@@ -18,9 +18,9 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
      switch(choice){
 
         case("1"):
-          readRiddlesToPlay();
+         readRiddlesToPlay()
           break;
-          
+
         case("2"):
            createRiddle();
            break;
@@ -46,7 +46,6 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
 
      }
     
-
 
 
 
