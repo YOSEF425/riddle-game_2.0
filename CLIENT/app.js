@@ -2,7 +2,7 @@ import readline from 'readline-sync';
 import { Player } from './classes/Player.js';
 import { Riddle } from './classes/Riddle.js';
 import {createRiddle} from './services/createRiddle.js'
-import {readRiddles} from './services/readRiddles.js'
+import {readRiddles,readRiddlesToPlay} from './services/readRiddles.js'
 import {updateRiddle} from './services/updateRiddle.js'
 
 
@@ -18,8 +18,9 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
      switch(choice){
 
         case("1"):
-
-        
+          readRiddlesToPlay();
+          break;
+          
         case("2"):
            createRiddle();
            break;
