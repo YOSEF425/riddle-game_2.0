@@ -11,8 +11,8 @@ export class Riddle {
 
     ask() {
         const startTime = Date.now();
-        console.log(`${this.id}:  ${this.name}`)
-        let answer = 0;
+        console.log(this.name)
+        let answer = "";
         while (answer !== this.correctAnswer) {
             answer = readline.question(`${this.taskDescription}`);
             if (answer !== this.correctAnswer) {

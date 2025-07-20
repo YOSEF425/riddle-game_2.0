@@ -11,21 +11,32 @@ const PORT = 5000;
 app.use(express.json());
 
 
+await connectToMongo();
+const collection = client.db("myDatabase").collection("riddleCollection")
+
 app.get('/api/riddles',async(req,res) => {
     try{
-         const allDocs = await riddleCollection.find({}).toArray();
+         const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
     }catch(error){
-        res.status(404).res.send(`Error reading from database: ${error}`)
+        res.status(404).send(`Error reading from database: ${error}`)
     }
 
 })
 
+app.get('/api/riddles/play',async(req,res) => {
+    try{
+        const allDocs = await collection.find({}).toArray();
+        res.send(allDocs)
+    }catch(error){
+        res.status(404).send(`Error reading from database: ${error}`)
+    }
+})
 
 app.post('/api/riddles',async(req,res) => {
     const newDoc = req.body;
     try{
-       const result = await riddleCollection.insertOne(newDoc)
+       const result = await collection.insertOne(newDoc)
        res.send("added riddle to database!")
        res.end();
 
@@ -58,9 +69,11 @@ app.put('/api/riddles/:id',async(req,res) => {
 })
 
 app.delete('api/riddle/:id', async(req,res) => {
+   
+
      const idToDelete = req.params.id;
-     const res = await riddleCollection.deleteOne({id : new ObjectId(idToDelete)})
-     if(res.deleteCount === 1){
+     const result = await collection.deleteOne({id : new ObjectId(idToDelete)})
+     if(result.deleteCount === 1){
         res.send("Documant deleted successfully!")
      }
      else{
@@ -69,9 +82,7 @@ app.delete('api/riddle/:id', async(req,res) => {
 })
 
 
-await connectToMongo();
-const db = client.db("myDatabase")
-await db.createCollection("riddleCollection")
+
 
 
 app.listen(PORT,() => {

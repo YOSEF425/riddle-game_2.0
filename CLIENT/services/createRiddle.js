@@ -18,6 +18,7 @@ export async function createRiddle(){     // create riddle "object" , get all pr
          headers: {
              'Content-Type':'application/json'
          },
+         
          body: JSON.stringify(myRiddle)
         })
         const result = await response.text()
