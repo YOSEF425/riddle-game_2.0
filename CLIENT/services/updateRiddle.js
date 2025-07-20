@@ -1,10 +1,9 @@
 import readline from 'readline-sync';
-import fs, { read } from 'node:fs';
 import { error } from 'node:console';
 
 
 
-async function changeRiddle(riddleId){
+export async function updateRiddle(riddleId){
 
     const propertieToUpdate = readline.question(`Which part of the riddle do you want to change?(name,difficulty,question,answer)`)
     const newVersion = readline.question("What is the version after the change?")
@@ -14,7 +13,7 @@ async function changeRiddle(riddleId){
         headers : {
             'Content-Type':'application/json'
         },
-        body : JSON.stringify({[propertieToUpdate] : newVersion})
+        body : JSON.stringify({propertieToUpdate : propertieToUpdate, newVersion : newVersion})
         
     })
     const result = await response.text();
@@ -27,7 +26,6 @@ async function changeRiddle(riddleId){
     
 
 
-changeRiddle();
 
 
     

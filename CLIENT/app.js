@@ -2,15 +2,15 @@ import readline from 'readline-sync';
 import { Player } from './classes/Player.js';
 import { Riddle } from './classes/Riddle.js';
 import {createRiddle} from './services/createRiddle.js'
-//import { easy, medium, hard } from './riddles/riddleCollection.js'
+import {readRiddles} from './services/readRiddles.js'
+import {updateRiddle} from './services/updateRiddle.js'
+
 
 console.log("Welcome to the quiz!")
 const name = readline.question("What is your name?");
 const myPlayer = new Player(name)
 console.log(`Hello ${name}!\n\n\n`);
-// const level = readline.question("Choose difficulty: easy / medium / hard");
 
-// let chosenLevel = [];
 
 const choice = readline.question(`What do you want to do?\n1. Play the game\n2. Create a new riddle\n3. Read all riddles\n4. Update an existing riddle\n5. Delete a riddle\n6. View leaderboard`); 
 
@@ -22,13 +22,16 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
         
         case("2"):
            createRiddle();
+           break;
 
          case("3"):
-
+           readRiddles()
+           break;
 
          case("4"):
-
-
+           updateRiddle()
+           break; 
+           
          case("5"):
 
 

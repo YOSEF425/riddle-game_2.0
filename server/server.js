@@ -1,6 +1,7 @@
 import express from "express"
 import { connectToMongo } from "./MongoDB/db.js";
 import client from "./MongoDB/db.js";
+import { ObjectId } from "mongodb";
 
 
 const app = express();
@@ -15,7 +16,7 @@ app.get('/api/riddles',async(req,res) => {
          const allDocs = await riddleCollection.find({}).toArray();
         res.send(allDocs)
     }catch(error){
-        res.send(`Error reading for database: ${error}`)
+        res.status(404).res.send(`Error reading from database: ${error}`)
     }
 
 })
@@ -23,46 +24,48 @@ app.get('/api/riddles',async(req,res) => {
 
 app.post('/api/riddles',async(req,res) => {
     const newDoc = req.body;
-    console.log(`Recieved riddle: ${riddle}`)
     try{
        const result = await riddleCollection.insertOne(newDoc)
        res.send("added riddle to database!")
+       res.end();
 
     }catch(error){
-        res.send(`error uploading riddle to db ${error}`)
+        res.send(`error uploading riddle to db: ${error}`)
     }
 
 })
 
-app.put('/api/riddles/:id',(req,res) => {
-     const id = req.body.id;
-     const propertie = req.body;
-     const newVersion = req.body.propertieToChange;
+app.put('/api/riddles/:id',async(req,res) => {
 
-     
-    fs.readFile('./DATA/riddlesList.txt','utf-8',(error,data) => {
-        if(error){
-            res.status(500). res.send("error reading from database")
-        }
-        const riddleArray = JSON.parse(data)
+    try{
+     const id = req.params.id;
+     const propertieToChange = req.body.propertieToUpdate;
+     const newVersion = req.body.newVersion;
 
-        for(const riddle of riddleArray){
-            if(riddle.id === id){
-                riddle[propertie] = newVersion;
-                break;
-            }
-        }
-    
-        fs.writeFile('./DATA/riddlesList.txt',JSON.stringify(riddleArray,null,2),(error) => {
-          if(error){
-              res.status(500). res.send("error sending riddle to database.")
-          }
-          res.send("added update riddle to database!")
-        })
+     const foundRiddle = { _id: new ObjectId(id) };
 
+     const update = {
+     $set: {
+       propertieToChange: newVersion,
+       },
+    };
+    const updatedRiddle = await collection.updateOne(foundRiddle, update);
+    res.send('updated riddle!')
+    }catch(error){
+        res.send(`error updating riddle: ${error}`)
+    }
 
-    })
+})
 
+app.delete('api/riddle/:id', async(req,res) => {
+     const idToDelete = req.params.id;
+     const res = await riddleCollection.deleteOne({id : new ObjectId(idToDelete)})
+     if(res.deleteCount === 1){
+        res.send("Documant deleted successfully!")
+     }
+     else{
+        res.send("No documant with that id.")
+     }
 })
 
 
