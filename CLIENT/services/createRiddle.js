@@ -18,13 +18,17 @@ export async function createRiddle() {     // create riddle "object" , get all p
          headers: {
              'Content-Type':'application/json'
          },
-         
-         body: JSON.stringify(myRiddle)
-        })
+          body: JSON.stringify({
+            name: myRiddle.name,
+            difficulty: myRiddle.difficulty,
+            describe: myRiddle.describe,
+            answer: myRiddle.answer
+          })   
+       })
         const result = await response.text()
         console.log(result)
 
-}
+      }
 
 
 
