@@ -1,7 +1,6 @@
 import readline from 'readline-sync';
 import { Riddle } from '../classes/Riddle.js'
 import fs from 'node:fs';
-import { addRiddle } from '../api/riddles.js';
 
 
 export async function createRiddle() {     // create riddle "object" , get all properties from user
