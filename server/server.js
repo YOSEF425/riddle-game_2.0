@@ -2,6 +2,7 @@ import express from "express"
 import { connectToMongo } from "./MongoDB/db.js";
 import client from "./MongoDB/db.js";
 import { ObjectId } from "mongodb";
+import { supabaseClient } from "./supabaseDB/db.js";
 
 
 const app = express();
@@ -81,8 +82,29 @@ app.delete('api/riddle/:id', async(req,res) => {
      }
 })
 
+app.post('/api/player', async (req, res) => {
+  const { name, created_at, best_timing } = req.body;
+  try{
+      await supabaseClient
+   .from('players')
+    .insert([{ name, created_at, best_timing }]);
+  }catch(error){
+    return res.status(500).send(`error adding to db: ${error}`)
+  }
 
+})
 
+app.get('/api/player/:username', async (req, res) => {
+  const username = req.params;
+
+  const data = await supabaseClient
+    .from('players')
+    .select()
+    .eq('name', username)
+    .single(); 
+
+  res.send(data);
+});
 
 
 app.listen(PORT,() => {
