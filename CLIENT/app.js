@@ -5,11 +5,14 @@ import {createRiddle} from './services/createRiddle.js'
 import {readRiddles,readRiddlesToPlay} from './services/readRiddles.js'
 import {updateRiddle} from './services/updateRiddle.js'
 import { deleteRiddle } from './services/deleteRiddle.js';
+import { createClient } from '@supabase/supabase-js';
+import { createPerson } from './services/createPlayer.js';
 
 
 console.log("Welcome to the quiz!")
 const name = readline.question("What is your name?");
 const myPlayer = new Player(name)
+createPerson(myPlayer)
 console.log(`Hello ${name}!\n\n\n`);
 
 

@@ -18,6 +18,7 @@
   "homepage": "https://github.com/YOSEF425/JavaScript-22-06#readme",
   "description": "",
   "dependencies": {
+    "@supabase/supabase-js": "^2.52.0",
     "express": "^5.1.0",
     "mongodb": "^6.17.0",
     "readline-sync": "^1.4.10"
