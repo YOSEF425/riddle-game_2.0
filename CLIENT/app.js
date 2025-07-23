@@ -7,6 +7,7 @@ import {updateRiddle} from './services/updateRiddle.js'
 import { deleteRiddle } from './services/deleteRiddle.js';
 import { createClient } from '@supabase/supabase-js';
 import { createPerson } from './services/createPlayer.js';
+import { updateTotalTime } from './services/updatePlayerTime.js';
 
 
 console.log("Welcome to the quiz!")
@@ -23,6 +24,7 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
 
         case("1"):
          readRiddlesToPlay()
+         updateTotalTime()
           break;
 
         case("2"):
