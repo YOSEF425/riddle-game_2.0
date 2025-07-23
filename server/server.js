@@ -119,6 +119,21 @@ app.get('/api/player/:username', async (req, res) => {
 });
 
 
+app.post('/api/update-time',async (req,res) => {
+    const {name,best_time} = req.body
+    const {data,error} = await supabaseClient
+    .from('players')
+    .update({ best_time })
+    .eq('user_name', name);
+    if(error){
+        res.send(`error uploading time to db: ${error}`)
+    }
+    res.status(200).send('Best time updated successfully');
+})
+
+
+
+
 app.listen(PORT,() => {
     console.log(`Server running on port: ${PORT}`)
 })

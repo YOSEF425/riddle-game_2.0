@@ -12,7 +12,7 @@ export async function updateTotalTime(player) {
     });
 
     const result = await response.text();
-  } catch (error) {
+    }catch(error){
     console.error("Failed to update time:", error.message);
   }
 }
