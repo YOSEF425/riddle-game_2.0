@@ -12,10 +12,12 @@ const PORT = 5000;
 app.use(express.json());
 
 
-await connectToMongo();
-const collection = client.db("myDatabase").collection("riddleCollection")
+await connectToMongo();    
+const collection = client.db("myDatabase").collection("riddleCollection") // creating my collection in db.
 
-app.get('/api/riddles',async(req,res) => {
+
+
+app.get('/api/riddles',async(req,res) => {    
     try{
          const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -37,7 +39,7 @@ app.get('/api/riddles/play',async(req,res) => {
 app.post('/api/riddles',async(req,res) => {
     const newDoc = req.body;
     try{
-       const result = await collection.insertOne(newDoc)
+       await collection.insertOne(newDoc)
        res.send("added riddle to database!")
        res.end();
 
