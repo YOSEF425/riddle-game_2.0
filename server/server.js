@@ -2,6 +2,7 @@ import express from "express"
 import { connectToMongo } from "./MongoDB/db.js";
 import client from "./MongoDB/db.js";
 import { ObjectId } from "mongodb";
+import { supabaseClient } from "./supabaseDB/db.js";
 
 
 const app = express();
@@ -11,8 +12,8 @@ const PORT = 5000;
 app.use(express.json());
 
 
-await connectToMongo();
-const collection = client.db("myDatabase").collection("riddleCollection")
+await connectToMongo();    
+const collection = client.db("myDatabase").collection("riddleCollection") // creating my collection in db.
 
 
 
@@ -38,7 +39,7 @@ app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for 
 app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a riddle.
     const newDoc = req.body;
     try{
-       const result = await collection.insertOne(newDoc)
+       await collection.insertOne(newDoc)
        res.send("added riddle to database!")
        res.end();
 
@@ -84,7 +85,34 @@ app.delete('api/riddle/:id', async(req,res) => {
 })
 
 
+app.post('/api/player', async (req, res) => {
+  const { userName, createdAt, bestTime } = req.body;
+  
+      const {data,error} = await supabaseClient     // deconstruction. dont know what the "await" will return
+      .from('players')
+      .insert([{ user_name:userName, created_at:createdAt, best_time:bestTime}]);
+      if(error){
+        console.log(error)
+        res.send(`error uploading riddle to db: ${error}`)
+      }
+      else{
+        res.send('uploaded riddle to db successfully!')
+      }
+})
 
+
+
+app.get('/api/player/:username', async (req, res) => {
+  const username = req.params;
+
+  const data = await supabaseClient
+    .from('players')
+    .select()
+    .eq('name', username)
+    .single(); 
+
+  res.send(data);
+});
 
 
 app.listen(PORT,() => {
