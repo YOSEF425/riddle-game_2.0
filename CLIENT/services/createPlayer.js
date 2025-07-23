@@ -5,9 +5,9 @@ export async function createPerson(player) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: player.name,
-      created_at: player.createdAt,
-      best_time: player.bestTiming
+      userName: player.name,
+      createdAt: player.createdAt,
+      bestTime: player.bestTiming
     })
   });
 }
