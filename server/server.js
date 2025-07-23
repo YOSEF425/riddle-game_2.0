@@ -14,7 +14,9 @@ app.use(express.json());
 await connectToMongo();
 const collection = client.db("myDatabase").collection("riddleCollection")
 
-app.get('/api/riddles',async(req,res) => {
+
+
+app.get('/api/riddles',async(req,res) => {   // Show user all riddles.(not for playing, just show)
     try{
          const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -24,7 +26,7 @@ app.get('/api/riddles',async(req,res) => {
 
 })
 
-app.get('/api/riddles/play',async(req,res) => {
+app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for player to play!
     try{
         const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -33,7 +35,7 @@ app.get('/api/riddles/play',async(req,res) => {
     }
 })
 
-app.post('/api/riddles',async(req,res) => {
+app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a riddle.
     const newDoc = req.body;
     try{
        const result = await collection.insertOne(newDoc)
