@@ -17,7 +17,7 @@ const collection = client.db("myDatabase").collection("riddleCollection") // cre
 
 
 
-app.get('/api/riddles',async(req,res) => {    
+app.get('/api/riddles',async(req,res) => {   // Show user all riddles.(not for playing, just show)
     try{
          const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -27,7 +27,7 @@ app.get('/api/riddles',async(req,res) => {
 
 })
 
-app.get('/api/riddles/play',async(req,res) => {
+app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for player to play!
     try{
         const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -36,7 +36,7 @@ app.get('/api/riddles/play',async(req,res) => {
     }
 })
 
-app.post('/api/riddles',async(req,res) => {
+app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a riddle.
     const newDoc = req.body;
     try{
        await collection.insertOne(newDoc)
@@ -84,17 +84,23 @@ app.delete('api/riddle/:id', async(req,res) => {
      }
 })
 
-app.post('/api/player', async (req, res) => {
-  const { name, created_at, best_timing } = req.body;
-  try{
-      await supabaseClient
-   .from('players')
-    .insert([{ name, created_at, best_timing }]);
-  }catch(error){
-    return res.status(500).send(`error adding to db: ${error}`)
-  }
 
+app.post('/api/player', async (req, res) => {
+  const { userName, createdAt, bestTime } = req.body;
+  
+      const {data,error} = await supabaseClient     // deconstruction. dont know what the "await" will return
+      .from('players')
+      .insert([{ user_name:userName, created_at:createdAt, best_time:bestTime}]);
+      if(error){
+        console.log(error)
+        res.send(`error uploading riddle to db: ${error}`)
+      }
+      else{
+        res.send('uploaded riddle to db successfully!')
+      }
 })
+
+
 
 app.get('/api/player/:username', async (req, res) => {
   const username = req.params;

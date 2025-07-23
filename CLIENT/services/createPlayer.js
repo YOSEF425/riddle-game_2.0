@@ -7,7 +7,7 @@ export async function createPerson(player) {
     body: JSON.stringify({
       name: player.name,
       created_at: player.createdAt,
-      best_timing: player.bestTiming
+      best_time: player.bestTiming
     })
   });
 }
