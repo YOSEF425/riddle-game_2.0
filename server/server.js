@@ -85,6 +85,10 @@ app.delete('api/riddle/:id', async(req,res) => {
 })
 
 
+
+
+//  S U P A B A S E   E N D P O I N T S 
+
 app.post('/api/player', async (req, res) => {
   const { userName, createdAt, bestTime } = req.body;
   
