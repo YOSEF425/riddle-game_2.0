@@ -4,14 +4,14 @@ import {Riddle} from '../classes/Riddle.js'
 
 
 
-export async function readRiddles(){
+export async function readRiddles(){ // function to just show the riddles
     const result = await fetch('http://localhost:5000/api/riddles')
     console.log(await result.text())
 
     
 }
 
-export async function readRiddlesToPlay() {
+export async function readRiddlesToPlay() {  // function to show riddles to play
   const result = await fetch('http://localhost:5000/api/riddles/play');
   const riddleArray = await result.json();
 
