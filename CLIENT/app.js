@@ -11,9 +11,8 @@ import { updateTotalTime } from './services/updatePlayerTime.js';
 
 
 console.log("Welcome to the quiz!")
-const name = readline.question("What is your name?");
-const myPlayer = new Player(name)
-createPerson(myPlayer)
+
+createPerson();
 console.log(`Hello ${name}!\n\n\n`);
 
 

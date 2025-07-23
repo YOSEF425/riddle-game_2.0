@@ -3,6 +3,8 @@ import { connectToMongo } from "./MongoDB/db.js";
 import client from "./MongoDB/db.js";
 import { ObjectId } from "mongodb";
 import { supabaseClient } from "./supabaseDB/db.js";
+import bcrypt from 'bcrypt';
+import jsonwebtoken from 'jsonwebtoken'
 
 
 const app = express();
@@ -18,6 +20,12 @@ const collection = client.db("myDatabase").collection("riddleCollection") // cre
 
 
 app.get('/api/riddles',async(req,res) => {   // Show user all riddles.(not for playing, just show)
+
+    const token = req.headers.authorization?.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if(decoded.role === "guest" || decoded.role === "Guest"){
+        res.status(403).send('Access denied: this data is not visible to your role');
+    }
     try{
          const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -37,6 +45,12 @@ app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for 
 })
 
 app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a riddle.
+    const token = req.headers.authorization?.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if(decoded.role === "guest" || decoded.role === "Guest"){
+        res.status(403).send('admin or users only!')
+    }
+
     const newDoc = req.body;
     try{
        await collection.insertOne(newDoc)
@@ -88,6 +102,29 @@ app.delete('api/riddle/:id', async(req,res) => {
 
 
 //  S U P A B A S E   E N D P O I N T S 
+
+
+app.post('/signUp',async (req,res) => {
+    const {name,password} = req.body;
+    const hashed = await bcrypt.hash(password,12);
+    try{
+        const {data,error} = await supabaseClient
+       .from('players')
+       .insert([{user_name:name,password:hashed,role:"user"}])
+    }catch(error){
+        res.send(`error loading to db: ${error}`)
+    }
+    const payload = {
+        username:name,
+        role:'user'
+    }
+    const token = jsonwebtoken.sign(payload,process.env.JWT_SECRET_KEY)
+    res.json({token})
+   
+})
+
+
+
 
 app.post('/api/player', async (req, res) => {
   const { userName, createdAt, bestTime } = req.body;
