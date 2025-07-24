@@ -104,22 +104,25 @@ app.delete('api/riddle/:id', async(req,res) => {
 //  S U P A B A S E   E N D P O I N T S 
 
 
-app.post('/signUp',async (req,res) => {
+app.post('/api/signUp',async (req,res) => {
     const {name,password} = req.body;
-    const hashed = await bcrypt.hash(password,12);
-    try{
-        const {data,error} = await supabaseClient
-       .from('players')
-       .insert([{user_name:name,password:hashed,role:"user"}])
-    }catch(error){
-        res.send(`error loading to db: ${error}`)
-    }
-    const payload = {
-        username:name,
-        role:'user'
-    }
-    const token = jsonwebtoken.sign(payload,process.env.JWT_SECRET_KEY)
-    res.json({token})
+    console.log(`name is: ${name}\npassword is: ${password}`)
+    // const hashed = await bcrypt.hash(password,12);
+    // try{
+    //     const {data,error} = await supabaseClient
+    //    .from('players')
+    //    .insert([{user_name:name,password:hashed,role:"user"}])
+    // }catch(error){
+    //     res.status(500).send(`Error signing up.: ${error}`)
+    //     return
+    // }
+    // const payload = {
+    //     username:name,
+    //     role:'user'
+    // }
+    // const token = jsonwebtoken.sign(payload,'KDjenl5803jdjJFKnrj94305')
+    // res.json({token})
+    // console.log({token})
    
 })
 

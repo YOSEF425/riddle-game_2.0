@@ -11,6 +11,11 @@ import { updateTotalTime } from './services/updatePlayerTime.js';
 
 
 console.log("Welcome to the quiz!")
+tpyeOfUser = readline.question("Are you New or Old user? ")
+if(tpyeOfUser === 'Guest' || tpyeOfUser === "guest"){
+  readRiddlesToPlay();
+}
+
 
 createPerson();
 console.log(`Hello ${name}!\n\n\n`);
