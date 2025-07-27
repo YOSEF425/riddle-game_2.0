@@ -11,9 +11,20 @@ import { updateTotalTime } from './services/updatePlayerTime.js';
 
 
 console.log("Welcome to the quiz!")
+const newOrNot = readline.question('Are you New here?')
+if(newOrNot === "yes"){
+  const join = readline.question('Do you want to register?')
+  if(join === "no"){
+    console.log('If you dont want to register, the only thing you can do is just play the game :(')
+    readRiddlesToPlay()
+  }
+  else{
+    createPerson();
+  }
+}
+// else{
 
-createPerson();
-console.log(`Hello ${name}!\n\n\n`);
+// }
 
 
 const choice = readline.question(`What do you want to do?\n1. Play the game\n2. Create a new riddle\n3. Read all riddles\n4. Update an existing riddle\n5. Delete a riddle\n6. View leaderboard`); 

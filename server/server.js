@@ -24,8 +24,8 @@ function getRole(req,res,next){
     }
     const token = req.headers.authorization.split(' ')[1];
     try{
-        const decode = jsonwebtoken.verify(token,process.env.JWT_SECRET_KEY)
-        const role =  decode.role;
+        const decode = jsonwebtoken.verify(token,'KDjenl5803jdjJFKnrj94305')
+        req.role = decode.role;
         next()
     }catch(error){
         res.status(401).send("Your token is Unauthorized!")
@@ -33,12 +33,9 @@ function getRole(req,res,next){
 }
 
 
-app.get('/api/riddles',async(req,res) => {   // Show user all riddles.(not for playing, just show)
-
-    const token = req.headers.authorization?.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if(decoded.role === "guest" || decoded.role === "Guest"){
-        res.status(403).send('Access denied: this data is not visible to your role');
+app.get('/api/riddles',getRole,async(req,res) => {   // Show user all riddles.(not for playing, just show)
+    if(req.role === 'guest' || req.role === 'Guest'){
+        res.send('Guests cannot view riddle list')
     }
     try{
          const allDocs = await collection.find({}).toArray();
@@ -58,13 +55,10 @@ app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for 
     }
 })
 
-app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a riddle.
-    const token = req.headers.authorization?.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if(decoded.role === "guest" || decoded.role === "Guest"){
-        res.status(403).send('admin or users only!')
+app.post('/api/riddles',getRole,async(req,res) => {    // endpoint for user to add a riddle.
+    if(req.role === 'guest' || req.role === 'Guest'){
+        res.send('Guests cannot add to riddle list')
     }
-
     const newDoc = req.body;
     try{
        await collection.insertOne(newDoc)
@@ -77,8 +71,10 @@ app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a rid
 
 })
 
-app.put('/api/riddles/:id',async(req,res) => {
-
+app.put('/api/riddles/:id',getRole,async(req,res) => {
+     if(req.role !== 'Admin' || req.role ==! 'admin'){
+        res.send('Only admin can update riddles.')
+    }
     try{
      const id = req.params.id;
      const propertieToChange = req.body.propertieToUpdate;
@@ -99,8 +95,10 @@ app.put('/api/riddles/:id',async(req,res) => {
 
 })
 
-app.delete('api/riddle/:id', async(req,res) => {
-   
+app.delete('api/riddle/:id',getRole, async(req,res) => {
+    if(req.role !== 'Admin' || req.role ==! 'admin'){
+        res.send('Only admin can delete riddles.')
+    }
 
      const idToDelete = req.params.id;
      const result = await collection.deleteOne({id : new ObjectId(idToDelete)})
@@ -132,7 +130,7 @@ app.post('/signUp',async (req,res) => {
         username:name,
         role:'user'
     }
-    const token = jsonwebtoken.sign(payload,process.env.JWT_SECRET_KEY)
+    const token = jsonwebtoken.sign(payload,'KDjenl5803jdjJFKnrj94305')
     res.json({token})
    
 })

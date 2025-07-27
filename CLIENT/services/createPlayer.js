@@ -4,9 +4,8 @@ import readline from 'readline-sync';
 
 export async function createPerson() {
   
-  const name = readline.question("Whats your name?");
-  const password = readline.question("please enter a password!")
-  const role = readline.question("What is yout role? (Guest,User,Admin)")
+  const _name = readline.question("What's your name?");
+  const _password = readline.question("please enter a Password!")
     
 
   await fetch('http://localhost:5000/api/signUp', {
@@ -15,9 +14,8 @@ export async function createPerson() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: player.name,
-      created_at: player.createdAt,
-      best_time: player.bestTiming
+      name: _name,
+      password: _password,
     })
   });
 }
