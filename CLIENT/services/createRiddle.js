@@ -32,4 +32,4 @@ export async function createRiddle() {     // create riddle "object" , get all p
 
 
 
-
+createRiddle();

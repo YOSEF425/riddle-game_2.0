@@ -18,9 +18,10 @@ await connectToMongo();
 const collection = client.db("myDatabase").collection("riddleCollection") // creating my collection in db.
 
 
-function getRole(req,res,next){
-    if(!req.headers.authorization){
+function getRole(req,res,next){       // function to get user's role
+    if(!req.headers.authorization){   // client needs to send token via headers. If there is no token...
         res.send("You are not registered!")
+        return
     }
     const token = req.headers.authorization.split(' ')[1];
     try{
@@ -57,7 +58,7 @@ app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for 
 
 app.post('/api/riddles',getRole,async(req,res) => {    // endpoint for user to add a riddle.
     if(req.role === 'guest' || req.role === 'Guest'){
-        res.send('Guests cannot add to riddle list')
+       return res.status(403).send('Guests cannot add to riddle list')
     }
     const newDoc = req.body;
     try{
