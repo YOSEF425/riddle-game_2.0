@@ -3,6 +3,8 @@ import { connectToMongo } from "./MongoDB/db.js";
 import client from "./MongoDB/db.js";
 import { ObjectId } from "mongodb";
 import { supabaseClient } from "./supabaseDB/db.js";
+import bcrypt from 'bcrypt';
+import jsonwebtoken from 'jsonwebtoken'
 
 
 const app = express();
@@ -16,8 +18,25 @@ await connectToMongo();
 const collection = client.db("myDatabase").collection("riddleCollection") // creating my collection in db.
 
 
+function getRole(req,res,next){
+    if(!req.headers.authorization){
+        res.send("You are not registered!")
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    try{
+        const decode = jsonwebtoken.verify(token,'KDjenl5803jdjJFKnrj94305')
+        req.role = decode.role;
+        next()
+    }catch(error){
+        res.status(401).send("Your token is Unauthorized!")
+    }
+}
 
-app.get('/api/riddles',async(req,res) => {   // Show user all riddles.(not for playing, just show)
+
+app.get('/api/riddles',getRole,async(req,res) => {   // Show user all riddles.(not for playing, just show)
+    if(req.role === 'guest' || req.role === 'Guest'){
+        res.send('Guests cannot view riddle list')
+    }
     try{
          const allDocs = await collection.find({}).toArray();
         res.send(allDocs)
@@ -36,7 +55,10 @@ app.get('/api/riddles/play',async(req,res) => {  // Show riddles one by one for 
     }
 })
 
-app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a riddle.
+app.post('/api/riddles',getRole,async(req,res) => {    // endpoint for user to add a riddle.
+    if(req.role === 'guest' || req.role === 'Guest'){
+        res.send('Guests cannot add to riddle list')
+    }
     const newDoc = req.body;
     try{
        await collection.insertOne(newDoc)
@@ -49,8 +71,10 @@ app.post('/api/riddles',async(req,res) => {    // endpoint for user to add a rid
 
 })
 
-app.put('/api/riddles/:id',async(req,res) => {
-
+app.put('/api/riddles/:id',getRole,async(req,res) => {
+     if(req.role !== 'Admin' || req.role ==! 'admin'){
+        res.send('Only admin can update riddles.')
+    }
     try{
      const id = req.params.id;
      const propertieToChange = req.body.propertieToUpdate;
@@ -71,8 +95,10 @@ app.put('/api/riddles/:id',async(req,res) => {
 
 })
 
-app.delete('api/riddle/:id', async(req,res) => {
-   
+app.delete('api/riddle/:id',getRole, async(req,res) => {
+    if(req.role !== 'Admin' || req.role ==! 'admin'){
+        res.send('Only admin can delete riddles.')
+    }
 
      const idToDelete = req.params.id;
      const result = await collection.deleteOne({id : new ObjectId(idToDelete)})
@@ -88,6 +114,59 @@ app.delete('api/riddle/:id', async(req,res) => {
 
 
 //  S U P A B A S E   E N D P O I N T S 
+
+app.get('/findPlayerByName/:name', async (req, res) => {
+  const name = req.params.name;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('players')
+      .select('*')
+      .eq('user_name', name);
+
+    if (error) {
+      console.error(`Supabase error: ${error.message}`);
+      return res.status(500).send('Internal server error.');
+    }
+
+    if (data.length >= 1) {
+      return res.send('Found you in the system!');
+    } else {
+      return res.send('Didn’t find you in the system!');
+    }
+  } catch (err) {
+    console.error(`Unexpected error: ${err.message}`);
+    return res.status(500).send('Something went wrong.');
+  }
+});
+
+
+app.post('/api/signUp',async (req,res) => {
+    const {name,password} = req.body;
+    const hashed = await bcrypt.hash(password,12);
+    try{
+        const {data,error} = await supabaseClient
+       .from('players')
+       .insert([{user_name:name,password:hashed,role:"user"}])
+    
+    if(error) {
+      return res.status(500).send(`Error loading to DB: ${error.message}`);
+    }
+    const payload = {
+        username:name,
+        role:'user'
+    }
+    const token = jsonwebtoken.sign(payload,'KDjenl5803jdjJFKnrj94305')
+    res.json({token,message:'added you to player database!'})
+    }
+    catch(error){
+        res.send(`error: ${error}`)
+    }
+
+})
+
+
+
 
 app.post('/api/player', async (req, res) => {
   const { userName, createdAt, bestTime } = req.body;
@@ -106,31 +185,44 @@ app.post('/api/player', async (req, res) => {
 
 
 
-app.get('/api/player/:username', async (req, res) => {
-  const username = req.params;
+// app.get('/api/player/:username', async (req, res) => {
+//   const username = req.params;
+  
+//   const data = await supabaseClient
+//   .from('leaderboard') 
+//   .select('user_name')
+//   .eq('user_name',username)
+//     .from('players')
+//     .select()
+//     .eq('name', username)
+//     .single(); 
 
-  const data = await supabaseClient
-    .from('players')
-    .select()
-    .eq('name', username)
-    .single(); 
+//   res.send(data);
+// });
 
-  res.send(data);
-});
-
-
-app.post('/api/update-time',async (req,res) => {
-    const {name,best_time} = req.body
-    const {data,error} = await supabaseClient
-    .from('players')
-    .update({ best_time })
-    .eq('user_name', name);
-    if(error){
-        res.send(`error uploading time to db: ${error}`)
-    }
-    res.status(200).send('Best time updated successfully');
+app.post('/leaderboard/:player/:time',async(req,res) => {   // ADD PLAYER TO LEADERBOARD
+     const name = req.params.player
+     const time = req.params.time
+     const {data,error} = await supabaseClient
+     .from('leaderboard')
+     .select('best_record')
+     .eq('name',name)
+     .single()
+     if(data.best_record < time){
+        data.best_record = time
+     }
 })
 
+app.get('/showLB',async(req,res) => {     //  DISPLAY LEADERBOARD
+    const {data,error} = await supabaseClient
+    .from('leaderboard')
+    .select('*')
+    if (error) {
+  console.error('Error fetching table:', error);
+} else {
+  console.log('Full table data:', data);
+}
+})
 
 
 
