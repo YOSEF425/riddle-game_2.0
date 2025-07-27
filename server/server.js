@@ -18,6 +18,20 @@ await connectToMongo();
 const collection = client.db("myDatabase").collection("riddleCollection") // creating my collection in db.
 
 
+function getRole(req,res,next){
+    if(!req.headers.authorization){
+        res.send("You are not registered!")
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    try{
+        const decode = jsonwebtoken.verify(token,process.env.JWT_SECRET_KEY)
+        const role =  decode.role;
+        next()
+    }catch(error){
+        res.status(401).send("Your token is Unauthorized!")
+    }
+}
+
 
 app.get('/api/riddles',async(req,res) => {   // Show user all riddles.(not for playing, just show)
 
