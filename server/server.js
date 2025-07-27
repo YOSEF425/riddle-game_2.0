@@ -115,24 +115,54 @@ app.delete('api/riddle/:id',getRole, async(req,res) => {
 
 //  S U P A B A S E   E N D P O I N T S 
 
+app.get('/findPlayerByName/:name', async (req, res) => {
+  const name = req.params.name;
 
-app.post('/signUp',async (req,res) => {
+  try {
+    const { data, error } = await supabaseClient
+      .from('players')
+      .select('*')
+      .eq('user_name', name);
+
+    if (error) {
+      console.error(`Supabase error: ${error.message}`);
+      return res.status(500).send('Internal server error.');
+    }
+
+    if (data.length >= 1) {
+      return res.send('Found you in the system!');
+    } else {
+      return res.send('Didn’t find you in the system!');
+    }
+  } catch (err) {
+    console.error(`Unexpected error: ${err.message}`);
+    return res.status(500).send('Something went wrong.');
+  }
+});
+
+
+app.post('/api/signUp',async (req,res) => {
     const {name,password} = req.body;
     const hashed = await bcrypt.hash(password,12);
     try{
         const {data,error} = await supabaseClient
        .from('players')
        .insert([{user_name:name,password:hashed,role:"user"}])
-    }catch(error){
-        res.send(`error loading to db: ${error}`)
+    
+    if(error) {
+      return res.status(500).send(`Error loading to DB: ${error.message}`);
     }
     const payload = {
         username:name,
         role:'user'
     }
     const token = jsonwebtoken.sign(payload,'KDjenl5803jdjJFKnrj94305')
-    res.json({token})
-   
+    res.json({token,message:'added you to player database!'})
+    }
+    catch(error){
+        res.send(`error: ${error}`)
+    }
+
 })
 
 
@@ -155,31 +185,44 @@ app.post('/api/player', async (req, res) => {
 
 
 
-app.get('/api/player/:username', async (req, res) => {
-  const username = req.params;
+// app.get('/api/player/:username', async (req, res) => {
+//   const username = req.params;
+  
+//   const data = await supabaseClient
+//   .from('leaderboard') 
+//   .select('user_name')
+//   .eq('user_name',username)
+//     .from('players')
+//     .select()
+//     .eq('name', username)
+//     .single(); 
 
-  const data = await supabaseClient
-    .from('players')
-    .select()
-    .eq('name', username)
-    .single(); 
+//   res.send(data);
+// });
 
-  res.send(data);
-});
-
-
-app.post('/api/update-time',async (req,res) => {
-    const {name,best_time} = req.body
-    const {data,error} = await supabaseClient
-    .from('players')
-    .update({ best_time })
-    .eq('user_name', name);
-    if(error){
-        res.send(`error uploading time to db: ${error}`)
-    }
-    res.status(200).send('Best time updated successfully');
+app.post('/leaderboard/:player/:time',async(req,res) => {   // ADD PLAYER TO LEADERBOARD
+     const name = req.params.player
+     const time = req.params.time
+     const {data,error} = await supabaseClient
+     .from('leaderboard')
+     .select('best_record')
+     .eq('name',name)
+     .single()
+     if(data.best_record < time){
+        data.best_record = time
+     }
 })
 
+app.get('/showLB',async(req,res) => {     //  DISPLAY LEADERBOARD
+    const {data,error} = await supabaseClient
+    .from('leaderboard')
+    .select('*')
+    if (error) {
+  console.error('Error fetching table:', error);
+} else {
+  console.log('Full table data:', data);
+}
+})
 
 
 
