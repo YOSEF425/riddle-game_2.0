@@ -15,7 +15,7 @@ export async function readRiddlesToPlay() {  // function to show riddles to play
   const result = await fetch('http://localhost:5000/api/riddles/play');
   const riddleArray = await result.json();
 
-  console.log('________HERE ARE THE RIDDLES_______');
+  console.log('________ HERE ARE THE RIDDLES... _______');
   let totalTime = 0;
 
   riddleArray.forEach(riddle => {

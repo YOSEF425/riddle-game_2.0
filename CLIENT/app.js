@@ -6,25 +6,35 @@ import {readRiddles,readRiddlesToPlay} from './services/readRiddles.js'
 import {updateRiddle} from './services/updateRiddle.js'
 import { deleteRiddle } from './services/deleteRiddle.js';
 import { createClient } from '@supabase/supabase-js';
-import { createPerson } from './services/createPlayer.js';
+import { createPerson } from './services/createPerson.js';
 import { updateTotalTime } from './services/updatePlayerTime.js';
+import {findPlayer} from './services/findPlayer.js'
+import {addToLB} from './services/addToLeaderboard.js'
+import {displayLB} from './services/displayLeaderboard.js'
+
 
 
 console.log("Welcome to the quiz!")
+
 const newOrNot = readline.question('Are you New here?')
 if(newOrNot === "yes"){
   const join = readline.question('Do you want to register?')
   if(join === "no"){
     console.log('If you dont want to register, the only thing you can do is just play the game :(')
-    readRiddlesToPlay()
+    await readRiddlesToPlay()
+    process.exit();
   }
   else{
-    createPerson();
+    await createPerson();
   }
 }
-// else{
+else{ // user claims he's already registered
+  findPlayer();
+}
 
-// }
+
+
+
 
 
 const choice = readline.question(`What do you want to do?\n1. Play the game\n2. Create a new riddle\n3. Read all riddles\n4. Update an existing riddle\n5. Delete a riddle\n6. View leaderboard`); 
@@ -33,8 +43,13 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
      switch(choice){
 
         case("1"):
-         readRiddlesToPlay()
-         updateTotalTime()
+        const myName = readline.question("What is your name?")
+        console.log(`Hello ${myName}!!`)
+        const time = readRiddlesToPlay();
+        addToLeaderboard(myName,time)
+        
+
+
           break;
 
         case("2"):
@@ -53,14 +68,9 @@ const choice = readline.question(`What do you want to do?\n1. Play the game\n2. 
           deleteRiddle();
 
          case("6"):
+          displayLeaderboard();
 
-
-
-
-
-
-
-     }
+      }
     
 
 

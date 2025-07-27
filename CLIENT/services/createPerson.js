@@ -8,7 +8,7 @@ export async function createPerson() {
   const _password = readline.question("please enter a Password!")
     
 
-  await fetch('http://localhost:5000/api/signUp', {
+  const response = await fetch('http://localhost:5000/api/signUp', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -18,4 +18,8 @@ export async function createPerson() {
       password: _password,
     })
   });
+  const data = await response.text()
+  console.log(data)
+
 }
+
