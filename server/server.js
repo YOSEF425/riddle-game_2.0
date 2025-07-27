@@ -2,7 +2,7 @@ import express from "express"
 import { connectToMongo } from "./MongoDB/db.js";
 import client from "./MongoDB/db.js";
 import { ObjectId } from "mongodb";
-import { supabaseClient } from "./supabaseDB/db.js";
+import { supabaseClient }  from "./supabaseDB/db.js";
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken'
 
@@ -13,6 +13,23 @@ const PORT = 5000;
 
 app.use(express.json());
 
+
+// app.get('/names',logger,(req,res) => {
+//     res.send("hi from server!")
+// })
+
+// function logger(req,res,next){
+//     console.log("hi from function")
+//     next()
+// }
+
+function getRole(req,res,next){
+    const role = req.body.token
+    if(!role){
+        res.send('You are not registered in the system!')
+    }
+    
+}
 
 await connectToMongo();    
 const collection = client.db("myDatabase").collection("riddleCollection") // creating my collection in db.
@@ -106,24 +123,23 @@ app.delete('api/riddle/:id', async(req,res) => {
 
 app.post('/api/signUp',async (req,res) => {
     const {name,password} = req.body;
-    console.log(`name is: ${name}\npassword is: ${password}`)
-    // const hashed = await bcrypt.hash(password,12);
-    // try{
-    //     const {data,error} = await supabaseClient
-    //    .from('players')
-    //    .insert([{user_name:name,password:hashed,role:"user"}])
-    // }catch(error){
-    //     res.status(500).send(`Error signing up.: ${error}`)
-    //     return
-    // }
-    // const payload = {
-    //     username:name,
-    //     role:'user'
-    // }
-    // const token = jsonwebtoken.sign(payload,'KDjenl5803jdjJFKnrj94305')
-    // res.json({token})
-    // console.log({token})
-   
+    const hashed = await bcrypt.hash(password,12);
+    try{
+        const {data,error} = await supabaseClient
+       .from('players')
+       .insert([{user_name:name,password:hashed,role:"user"}])
+       console.log('Insert Result:', data, error);
+       res.status(200).send('You were added to the list of players!')
+    }catch(error){
+        res.status(500).send(`Error signing up.: ${error}`)
+        return
+    }
+    const payload = {
+        username:name,
+        role:'user'
+    }
+    const token = jsonwebtoken.sign(payload,'KDjenl5803jdjJFKnrj94305')
+    res.json({token})   
 })
 
 
